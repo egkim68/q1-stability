@@ -73,8 +73,8 @@ groups = {'all journals': r, 'RECENT': r[r.cat == 'RECENT'], 'classifiable': r[r
 for name, d in groups.items():
     rates = {L: d[f'lag{L}'].mean() * 100 for L in LAGS}
     background = np.mean([rates[L] for L in (3, 4, 5, 6)])
-    out[name] = dict(n=len(d), **{f'lag{L}': round(v, 1) for L, v in rates.items()}, background=round(background, 1),
-                     excess_lag0_1=round(rates[0] + rates[1] - 2 * background, 1))
+    out[name] = dict(n=len(d), **{f'lag{L}': round(float(v), 1) for L, v in rates.items()}, background=round(float(background), 1),
+                     excess_lag0_1=round(float(rates[0] + rates[1] - 2 * background), 1))
     print(name, out[name])
 
 r['ytq'] = r.firstq1 - r.entry
@@ -90,8 +90,8 @@ cl = r[r.cat != 'RECENT']
 def association(d):
     t = pd.crosstab(d.rapid, d.in_q1_now)
     chi = chi2_contingency(t, correction=False)[0]
-    return dict(n=len(d), rapid_retained=round(d[d.rapid].in_q1_now.mean() * 100, 1),
-                others_retained=round(d[~d.rapid].in_q1_now.mean() * 100, 1), chi2=round(chi, 1))
+    return dict(n=len(d), rapid_retained=round(float(d[d.rapid].in_q1_now.mean()) * 100, 1),
+                others_retained=round(float(d[~d.rapid].in_q1_now.mean()) * 100, 1), chi2=round(float(chi), 1))
 
 
 out['association_all'] = association(cl)

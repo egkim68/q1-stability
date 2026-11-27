@@ -61,7 +61,7 @@ L['supergroup'] = L.areas.map(amap)
 rows = []
 for k, d in L.groupby('supergroup'):
     q = d.entropy.quantile([.25, .5, .75])
-    rows.append(dict(supergroup=k, n=len(d), median=q[.5], sd=d.entropy.std(), iqr=q[.75] - q[.25],
+    rows.append(dict(supergroup=k, n=len(d), median=abs(q[.5]), sd=d.entropy.std(), iqr=q[.75] - q[.25],
                      pct_near_zero=(d.entropy < 0.1).mean() * 100))
 t4 = pd.DataFrame(rows).set_index('supergroup')
 print('\n== Table 4: entropy dispersion by supergroup')
